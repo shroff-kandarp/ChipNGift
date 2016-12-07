@@ -30,7 +30,7 @@
                 android:layout_width="300dp"
                 android:layout_height="150dp"
                 android:contentDescription="@string/test"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/logotxt_trans" />
 
 
         </LinearLayout>

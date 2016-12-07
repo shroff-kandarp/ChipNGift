@@ -6,11 +6,15 @@
     <string name="signin"> LOGIN </string>
 
     <string name="et_username"> USERNAME </string>
+    <string name="et_mobile"> MOBILE NO </string>
     <string name="et_password"> PASSWORD </string>
     <string name="tv_forgot_password"> Forgot Password? </string>
+
+    <string name="tv_skip"> Skip </string>
 
     <string name="tv_connect_with"> --------------- OR CONNECT WITH --------------- </string>
     <string name="tv_facebook"> FACEBOOK </string>
     <string name="tv_google"> GOOGLE </string>
-
+    <string name="btn_continue"> CONTINUE </string>
+    <string name="tv_already"> Already have an account? </string>
 </resources>

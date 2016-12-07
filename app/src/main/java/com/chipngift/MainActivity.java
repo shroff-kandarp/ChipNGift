@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         tv_skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

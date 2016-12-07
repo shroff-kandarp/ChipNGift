@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -31,8 +32,12 @@ public class LauncherActivity extends AppCompatActivity {
             public void run() {
 
                 (new StartActProcess(getActContext())).startAct(MainActivity.class);
+
+                ActivityCompat.finishAffinity(LauncherActivity.this);
             }
         }, 6500);
+
+
     }
 
     public Context getActContext() {

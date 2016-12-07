@@ -27,10 +27,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:contentDescription="@string/test"
-                android:src="@mipmap/ic_launcher" />
+                android:scaleType="fitCenter"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:src="@drawable/logotxt_trans" />
 
 
         </LinearLayout>

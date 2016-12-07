@@ -7,5 +7,7 @@
     <color name="appThemeColor">#db0000</color>
     <color name="appThemeColor_transparent">#80db0000</color>
     <color name="whiteColor">#ffffff</color>
+    <color name="grayColor">#72767c</color>
+
 
 </resources>

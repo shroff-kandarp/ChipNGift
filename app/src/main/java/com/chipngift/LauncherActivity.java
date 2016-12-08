@@ -31,7 +31,7 @@ public class LauncherActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                (new StartActProcess(getActContext())).startAct(MainActivity.class);
+                (new StartActProcess(getActContext())).startAct(AppIntroActivity.class);
 
                 ActivityCompat.finishAffinity(LauncherActivity.this);
             }

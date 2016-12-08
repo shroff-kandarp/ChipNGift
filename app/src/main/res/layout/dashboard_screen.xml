@@ -41,7 +41,7 @@
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/logotxt" />
+                android:src="@drawable/logotxt_trans" />
 
             <TextView
                 android:id="@+id/cosmoTxt"

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "844690422315",
+    "project_id": "firebase-chipngift"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844690422315:android:4caab3773f72205b",
+        "android_client_info": {
+          "package_name": "com.chipngift"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844690422315-lncei89e1h4phe35nt75656vltocsdne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl1ZznPwWgaVjF6JEFAXURRwnhSA096u0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

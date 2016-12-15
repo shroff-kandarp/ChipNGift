@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 
 import com.utils.Utils;
 
+import java.util.HashMap;
+
 /**
  * Created by Shroff on 08-Dec-16.
  */
@@ -39,5 +41,14 @@ public class GeneralFunctions {
         }
 
         return false;
+    }
+
+    public void setMemberData(HashMap<String, String> data) {
+
+        storedata(Utils.userLoggedIn_key, "1");
+        storedata(Utils.SOCIAL_ID_key, data.get(Utils.SOCIAL_ID_key));
+        storedata(Utils.name_key, data.get(Utils.name_key));
+        storedata(Utils.email_key, data.get(Utils.email_key));
+        storedata(Utils.SOCIAL_LOGIN_key, data.get(Utils.SOCIAL_LOGIN_key));
     }
 }

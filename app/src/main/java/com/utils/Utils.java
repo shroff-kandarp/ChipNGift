@@ -3,6 +3,7 @@ package com.utils;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.Patterns;
 import android.util.TypedValue;
 
@@ -12,10 +13,19 @@ import android.util.TypedValue;
 public class Utils {
 
     public static String isFirstLaunchFinished = "isFirstLaunchFinished";
+    public static String userLoggedIn_key = "isUserLoggedIn";
+    public static String email_key = "Email";
+    public static String name_key = "isUserLoggedIn";
+    public static String SOCIAL_ID_key = "SOCIAL_ID";
+    public static String SOCIAL_LOGIN_key = "SOCIAL_LOGIN";
+    public static String SOCIAL_LOGIN_GOOGLE_key_value = "GOOGLE";
+    public static String SOCIAL_LOGIN_FACEBOOK_key_value = "FACEBOOK";
 
     public static final int MENU_FIESTA = 0;
     public static final int MENU_REG_QR = 1;
     public static final int MENU_DISCOUNT = 2;
+
+    public static final int GOOGLE_SIGN_IN_REQ_CODE = 112;
 
     //Single Instance object
     private static Utils instance = null;
@@ -30,6 +40,10 @@ public class Utils {
             instance = new Utils();
 
         return instance;
+    }
+
+    public static void printLog(String tag, String msg) {
+        Log.d(tag, msg);
     }
 
     public boolean isValidEmail(String emailId) {

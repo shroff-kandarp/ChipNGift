@@ -54,6 +54,11 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         buildMenu();
 
+        if (generalFunc.isUserLoggedIn()) {
+            (findViewById(R.id.header_area)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.header_area_noLogin)).setVisibility(View.GONE);
+            ((TextView) findViewById(R.id.userNameTxt)).setText(generalFunc.retriveValue(Utils.name_key));
+        }
     }
 
     public class setOnClickList implements View.OnClickListener {
@@ -96,10 +101,11 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "AboutUs", "" + Utils.MENU_ABOUT_US});
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Videos", "" + Utils.MENU_VIDEOS});
         list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Blog", "" + Utils.MENU_BLOG});
-        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Sign Out", "" + Utils.MENU_SIGN_OUT});
 
+        if (generalFunc.isUserLoggedIn()) {
+            list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Sign Out", "" + Utils.MENU_SIGN_OUT});
+        }
         drawerAdapter.notifyDataSetChanged();
-
     }
 
     @Override

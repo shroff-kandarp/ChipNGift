@@ -67,47 +67,92 @@
 
     <LinearLayout
         android:id="@+id/left_linear"
-        android:layout_width="match_parent"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#FFFFFF"
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/header_area"
             android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:background="@color/appThemeColor_transparent">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/logoMenu"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/logotxt_trans" />
+            <RelativeLayout
+                android:id="@+id/header_area_noLogin"
+                android:layout_width="match_parent"
+                android:layout_height="190dp"
+                android:background="@color/appThemeColor_transparent">
 
-            <TextView
-                android:id="@+id/cosmoTxt"
+                <ImageView
+                    android:id="@+id/logoMenu"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/logotxt_trans" />
+
+                <TextView
+                    android:id="@+id/cosmoTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/logoMenu"
+                    android:gravity="center"
+                    android:text="Chip N Gift"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/cosmoTxt"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center"
+                    android:text="Wish batana achha hai !!"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/header_area"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/logoMenu"
-                android:gravity="center"
-                android:text="Chip N Gift"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
+                android:background="@color/appThemeColor_transparent"
+                android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cosmoTxt"
-                android:layout_marginTop="2dp"
-                android:gravity="center"
-                android:text="Wish batana achha hai !!"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                <com.view.SelectableRoundedImageView
+                    android:id="@+id/userImgView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="25dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/ic_no_pic_user"
+                    app:sriv_border_color="@color/appThemeColor"
+                    app:sriv_border_width="2dip"
+                    app:sriv_left_bottom_corner_radius="20dip"
+                    app:sriv_left_top_corner_radius="20dip"
+                    app:sriv_oval="true"
+                    app:sriv_right_bottom_corner_radius="20dip"
+                    app:sriv_right_top_corner_radius="20dip" />
+
+                <TextView
+                    android:id="@+id/userNameTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/userImgView"
+                    android:layout_gravity="center_vertical|start"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="true"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/txt_size_18" />
+            </RelativeLayout>
 
         </RelativeLayout>
+
 
         <ListView
             android:id="@+id/menuListView"

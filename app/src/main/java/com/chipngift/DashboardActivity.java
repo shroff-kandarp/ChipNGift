@@ -3,8 +3,6 @@ package com.chipngift;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.adapter.DrawerAdapter;
-import com.fragment.Dashboardfragment;
+import com.general.files.GeneralFunctions;
 import com.utils.Utils;
 
 import java.util.ArrayList;
@@ -33,22 +31,19 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     TextView titleTxt;
 
-    Dashboardfragment dashboardfragment;
+    GeneralFunctions generalFunc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dashboard_screen);
-
-
-
-
-
+        setContentView(R.layout.activity_dashboard);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(getResources().getColor(R.color.appThemeColor));
         }
+
+        generalFunc = new GeneralFunctions(getActContext());
 
         menuImgView = (ImageView) findViewById(R.id.menuImgView);
         menuListView = (ListView) findViewById(R.id.menuListView);
@@ -57,9 +52,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         menuImgView.setOnClickListener(new setOnClickList());
 
-        buildMenu(true, false, false);
+        buildMenu();
 
-        goToFiesta();
     }
 
     public class setOnClickList implements View.OnClickListener {
@@ -88,20 +82,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
-    public void setPageTitle(int pageId) {
-        for (int i = 0; i < list_menu_items.size(); i++) {
-            int pageId_temp = Integer.parseInt(list_menu_items.get(i)[2]);
-
-            if (pageId == pageId_temp) {
-                titleTxt.setText(list_menu_items.get(i)[1]);
-                break;
-            }
-
-        }
-
-    }
-
-    public void buildMenu(boolean menu_fiesta, boolean menu_qr, boolean menu_discount) {
+    public void buildMenu() {
         if (list_menu_items == null) {
             list_menu_items = new ArrayList();
             drawerAdapter = new DrawerAdapter(list_menu_items, getActContext());
@@ -112,58 +93,27 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             list_menu_items.clear();
         }
 
-        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Home", "" + Utils.MENU_FIESTA, "" + menu_fiesta});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "AboutUs", "" + Utils.MENU_ABOUT_US});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Videos", "" + Utils.MENU_VIDEOS});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Blog", "" + Utils.MENU_BLOG});
+        list_menu_items.add(new String[]{"" + R.mipmap.ic_launcher, "Sign Out", "" + Utils.MENU_SIGN_OUT});
 
         drawerAdapter.notifyDataSetChanged();
 
-    }
-
-    public void removeAllFragments() {
-        FragmentManager fm = getSupportFragmentManager();
-        int count = fm.getBackStackEntryCount();
-        for (int i = 0; i < count; ++i) {
-            fm.popBackStackImmediate();
-        }
-        System.gc();
-    }
-
-    public void goToFiesta() {
-        removeAllFragments();
-//        if (cosmoFiestaFrag == null) {
-        dashboardfragment = null;
-        System.gc();
-        dashboardfragment = new Dashboardfragment();
-//        }
-        changeFragment(dashboardfragment, false);
-        closeDrawer();
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         int itemId = Integer.parseInt(list_menu_items.get(position)[2]);
         switch (itemId) {
-            case Utils.MENU_FIESTA:
-                goToFiesta();
-                buildMenu(true, false,false);
+            case Utils.MENU_SIGN_OUT:
+                generalFunc.signOut();
+
                 break;
 
         }
     }
 
-
-
-    public void changeFragment(Fragment fragment, boolean addToStack) {
-
-        if (addToStack == true) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, fragment).addToBackStack(null).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainer, fragment).commit();
-        }
-
-        System.gc();
-    }
 
     public Context getActContext() {
         return DashboardActivity.this;

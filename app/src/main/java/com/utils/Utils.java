@@ -21,9 +21,10 @@ public class Utils {
     public static String SOCIAL_LOGIN_GOOGLE_key_value = "GOOGLE";
     public static String SOCIAL_LOGIN_FACEBOOK_key_value = "FACEBOOK";
 
-    public static final int MENU_FIESTA = 0;
-    public static final int MENU_REG_QR = 1;
-    public static final int MENU_DISCOUNT = 2;
+    public static final int MENU_ABOUT_US = 0;
+    public static final int MENU_BLOG = 1;
+    public static final int MENU_VIDEOS = 2;
+    public static final int MENU_SIGN_OUT = 3;
 
     public static final int GOOGLE_SIGN_IN_REQ_CODE = 112;
 

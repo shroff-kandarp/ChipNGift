@@ -2,7 +2,6 @@ package com.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,12 +52,6 @@ public class DrawerAdapter extends BaseAdapter {
         TextView menuTitleTxt = (TextView) view.findViewById(R.id.menuTitleTxt);
         menuIcon.setImageResource(Integer.parseInt(list_item.get(i)[0]));
         menuTitleTxt.setText(list_item.get(i)[1]);
-
-        if(list_item.get(i)[3].equals("true")){
-            (view.findViewById(R.id.menuContainer)).setBackgroundColor(Color.parseColor("#dcdcdc"));
-        }else{
-            (view.findViewById(R.id.menuContainer)).setBackgroundColor(mContext.getResources().getColor(android.R.color.transparent));
-        }
 
         return view;
     }

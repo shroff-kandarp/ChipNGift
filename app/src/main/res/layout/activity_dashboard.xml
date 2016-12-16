@@ -16,9 +16,53 @@
             layout="@layout/design_toolbar_main" />
 
         <RelativeLayout
-            android:id="@+id/fragmentContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <com.view.floatingbutton.FloatingActionsMenu
+                android:id="@+id/multiple_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginEnd="15dp"
+                app:fab_addButtonColorNormal="@color/pink"
+                app:fab_addButtonColorPressed="@color/pink_pressed"
+                app:fab_addButtonPlusIconColor="@color/whiteColor"
+                app:fab_addButtonSize="mini"
+                app:fab_labelStyle="@style/menu_labels_style"
+                app:fab_labelsPosition="left">
+
+                <com.view.floatingbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white_pressed"
+                    app:fab_size="mini"
+                    app:fab_title="Create an event" />
+
+                <com.view.floatingbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white_pressed"
+                    app:fab_size="mini"
+                    app:fab_title="Categories" />
+
+
+                <com.view.floatingbutton.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:fab_colorNormal="@color/white"
+                    app:fab_colorPressed="@color/white_pressed"
+                    app:fab_size="mini"
+                    app:fab_title="Video gallery" />
+
+
+            </com.view.floatingbutton.FloatingActionsMenu>
+        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout

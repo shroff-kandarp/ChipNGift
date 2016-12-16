@@ -1,9 +1,12 @@
 package com.general.files;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 
+import com.chipngift.LauncherActivity;
 import com.utils.Utils;
 
 import java.util.HashMap;
@@ -44,12 +47,21 @@ public class GeneralFunctions {
     }
 
     public void setMemberData(HashMap<String, String> data) {
-
         storedata(Utils.userLoggedIn_key, "1");
         storedata(Utils.SOCIAL_ID_key, data.get(Utils.SOCIAL_ID_key));
         storedata(Utils.name_key, data.get(Utils.name_key));
         storedata(Utils.email_key, data.get(Utils.email_key));
         storedata(Utils.LOGIN_TYPE_key, data.get(Utils.LOGIN_TYPE_key));
+    }
+
+    public void signOut() {
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.clear();
+
+        editor.commit();
+
+        restartApp();
     }
 
     public boolean isUserLoggedIn() {
@@ -99,5 +111,10 @@ public class GeneralFunctions {
 //        }
 
         return true;
+    }
+
+    public void restartApp() {
+        (new StartActProcess(mContext)).startAct(LauncherActivity.class);
+        ActivityCompat.finishAffinity((Activity) mContext);
     }
 }

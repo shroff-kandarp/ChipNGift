@@ -15,9 +15,9 @@ public class Utils {
     public static String isFirstLaunchFinished = "isFirstLaunchFinished";
     public static String userLoggedIn_key = "isUserLoggedIn";
     public static String email_key = "Email";
-    public static String name_key = "isUserLoggedIn";
+    public static String name_key = "UserName";
     public static String SOCIAL_ID_key = "SOCIAL_ID";
-    public static String SOCIAL_LOGIN_key = "SOCIAL_LOGIN";
+    public static String LOGIN_TYPE_key = "LOGIN_TYPE";
     public static String SOCIAL_LOGIN_GOOGLE_key_value = "GOOGLE";
     public static String SOCIAL_LOGIN_FACEBOOK_key_value = "FACEBOOK";
 

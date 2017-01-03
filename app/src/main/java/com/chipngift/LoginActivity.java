@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.general.files.StartActProcess;
 import com.google.android.gms.auth.api.Auth;
@@ -19,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.utils.Utils;
+import com.view.editBox.MaterialEditText;
 
 import java.util.HashMap;
 
@@ -32,6 +34,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     GoogleApiClient mGoogleApiClient;
 
     GeneralFunctions generalFunc;
+    MaterialEditText emailBox;
+    MaterialEditText passwordBox;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,8 +45,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         generalFunc = new GeneralFunctions(getActContext());
 
         googleLoginBtn = (Button) findViewById(R.id.googleLoginBtn);
+        emailBox = (MaterialEditText) findViewById(R.id.emailBox);
+        passwordBox = (MaterialEditText) findViewById(R.id.passwordBox);
 
         googleLoginBtn.setOnClickListener(new setOnClickList());
+
+        emailBox.setBothText("Email");
+        passwordBox.setBothText("Password");
 
         buildGoogleApi();
     }
@@ -77,6 +86,43 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public Context getActContext() {
         return LoginActivity.this;
+    }
+
+    public void checkData() {
+        boolean isEmailEntered = false;
+    }
+
+    public void login(String authType, String userId, String emailId, String password) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("Type", "login");
+        parameters.put("Auth_type", authType);
+        parameters.put("Uniq_id", userId);
+        parameters.put("Email", emailId);
+        parameters.put("Password", password);
+
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
+
+                Utils.printLog("Response", "::" + responseString);
+
+                if (responseString != null && !responseString.equals("")) {
+
+                    boolean isDataAvail = generalFunc.checkDataAvail("success", responseString);
+
+                    if (isDataAvail == true) {
+
+
+                    } else {
+                        generalFunc.showGeneralMessage("Error Occurred", generalFunc.getJsonValue("message", responseString));
+                    }
+                } else {
+                    generalFunc.showError();
+                }
+            }
+        });
+        exeWebServer.execute();
     }
 
     @Override

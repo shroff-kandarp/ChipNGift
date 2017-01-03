@@ -32,4 +32,11 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="bg_materialEditText" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/appThemeColor_transparent</item>
+        <item name="colorPrimaryDark">@color/appThemeColor</item>
+        <item name="colorAccent">@color/appThemeColor_transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>

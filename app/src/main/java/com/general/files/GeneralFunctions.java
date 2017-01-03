@@ -8,6 +8,11 @@ import android.support.v4.app.ActivityCompat;
 
 import com.chipngift.LauncherActivity;
 import com.utils.Utils;
+import com.view.GenerateAlertBox;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -46,6 +51,10 @@ public class GeneralFunctions {
         return false;
     }
 
+    public boolean isRTLmode() {
+        return false;
+    }
+
     public void setMemberData(HashMap<String, String> data) {
         storedata(Utils.userLoggedIn_key, "1");
         storedata(Utils.SOCIAL_ID_key, data.get(Utils.SOCIAL_ID_key));
@@ -71,6 +80,130 @@ public class GeneralFunctions {
         }
 
         return false;
+    }
+
+    public static boolean checkDataAvail(String key, String response) {
+        try {
+            JSONObject obj_temp = new JSONObject(response);
+
+            String action_str = obj_temp.getString(key);
+
+            if (!action_str.equals("") && !action_str.equals("0") && action_str.equals("1")) {
+                return true;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return false;
+        }
+
+        return false;
+    }
+
+    public String getJsonValue(String key, String response) {
+
+        try {
+            JSONObject obj_temp = new JSONObject(response);
+
+            String value_str = obj_temp.getString(key);
+
+            if (value_str != null && !value_str.equals("null") && !value_str.equals("")) {
+                return value_str;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return "";
+        }
+
+        return "";
+    }
+
+    public JSONArray getJsonArray(String key, String response) {
+        try {
+            JSONObject obj_temp = new JSONObject(response);
+            JSONArray obj_temp_arr = obj_temp.getJSONArray(key);
+
+            return obj_temp_arr;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
+    }
+
+    public JSONArray getJsonArray(String response) {
+        try {
+            JSONArray obj_temp_arr = new JSONArray(response);
+
+            return obj_temp_arr;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
+    }
+
+    public JSONObject getJsonObject(JSONArray arr, int position) {
+        try {
+            JSONObject obj_temp = arr.getJSONObject(position);
+
+            return obj_temp;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+
+    }
+
+    public boolean isJSONkeyAvail(String key, String response) {
+        try {
+            JSONObject json_obj = new JSONObject(response);
+
+            if (json_obj.has(key) && !json_obj.isNull(key)) {
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    public boolean isJSONArrKeyAvail(String key, String response) {
+        try {
+            JSONObject json_obj = new JSONObject(response);
+
+            if (json_obj.optJSONArray(key) != null) {
+                return true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    public void showError() {
+        GenerateAlertBox generateAlert = new GenerateAlertBox(mContext);
+        generateAlert.setContentMessage("Error Occurred", "Please try again later.");
+        generateAlert.setPositiveBtn("OK");
+        generateAlert.showAlertBox();
+    }
+
+    public void showGeneralMessage(String title, String message) {
+        GenerateAlertBox generateAlert = new GenerateAlertBox(mContext);
+        generateAlert.setContentMessage(title, message);
+        generateAlert.setPositiveBtn("OK");
+        generateAlert.showAlertBox();
     }
 
     public String generateDeviceToken() {

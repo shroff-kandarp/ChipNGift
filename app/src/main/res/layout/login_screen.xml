@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <View
         android:layout_width="match_parent"
@@ -111,6 +111,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/white_rounded_button"
                 android:text="@string/signin"
+                android:onClick="checkData"
                 android:textColor="@color/appThemeColor_transparent"
                 android:textSize="16sp"
                 android:textStyle="bold" />

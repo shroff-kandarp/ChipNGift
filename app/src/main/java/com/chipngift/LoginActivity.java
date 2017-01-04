@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 
@@ -47,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         googleLoginBtn = (Button) findViewById(R.id.googleLoginBtn);
         emailBox = (MaterialEditText) findViewById(R.id.emailBox);
         passwordBox = (MaterialEditText) findViewById(R.id.passwordBox);
-
+        passwordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         googleLoginBtn.setOnClickListener(new setOnClickList());
 
         emailBox.setBothText("Email");
@@ -88,11 +89,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         return LoginActivity.this;
     }
 
-    public void checkData() {
-        boolean isEmailEntered = false;
+    public void checkData(View v) {
+        boolean emailEntered = Utils.checkText(emailBox) ?
+                (Utils.isEmailValid(Utils.getText(emailBox)) ? true : Utils.setErrorFields(emailBox, "Invalid email"))
+                : Utils.setErrorFields(emailBox, "Required");
+
+        boolean passwordEntered = Utils.checkText(passwordBox) ?
+                (Utils.getText(passwordBox).contains(" ") ? Utils.setErrorFields(passwordBox, "Password should not contains whitespace.")
+                        : (Utils.getText(passwordBox).length() >= Utils.minPasswordLength ? true :
+                        Utils.setErrorFields(passwordBox, "Password must be more than " + Utils.minPasswordLength + " characters long")))
+                : Utils.setErrorFields(passwordBox, "Required");
+
+        if (emailEntered == true && passwordEntered == true) {
+            login("custom", "", Utils.getText(emailBox), Utils.getText(passwordBox));
+        }
     }
 
-    public void login(String authType, String userId, String emailId, String password) {
+    public void login(final String authType, final String userId, String emailId, String password) {
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("Type", "login");
         parameters.put("Auth_type", authType);
@@ -101,6 +114,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         parameters.put("Password", password);
 
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+        exeWebServer.setLoaderConfig(getActContext(), true, generalFunc);
         exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
             @Override
             public void setResponse(String responseString) {
@@ -112,7 +126,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     boolean isDataAvail = generalFunc.checkDataAvail("success", responseString);
 
                     if (isDataAvail == true) {
+                        HashMap<String, String> userData = new HashMap<>();
+                        userData.put(Utils.user_id_key, generalFunc.getJsonValue("user_id", generalFunc.getJsonValue("user", responseString)));
+                        userData.put(Utils.email_key, generalFunc.getJsonValue("email", generalFunc.getJsonValue("user", responseString)));
+                        userData.put(Utils.name_key, generalFunc.getJsonValue("firstName", generalFunc.getJsonValue("user", responseString))
+                                + " " + generalFunc.getJsonValue("lastName", generalFunc.getJsonValue("user", responseString)));
 
+                        if (authType.equals("google")) {
+                            userData.put(Utils.SOCIAL_ID_key, userId);
+                            userData.put(Utils.LOGIN_TYPE_key, Utils.SOCIAL_LOGIN_GOOGLE_key_value);
+                        }
+
+                        generalFunc.setMemberData(userData);
+
+                        (new StartActProcess(getActContext())).startAct(DashboardActivity.class);
+                        ActivityCompat.finishAffinity(LoginActivity.this);
 
                     } else {
                         generalFunc.showGeneralMessage("Error Occurred", generalFunc.getJsonValue("message", responseString));
@@ -140,18 +168,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Utils.printLog("id", "::" + acct.getId());
                 Utils.printLog("tok", "::" + acct.getIdToken());
                 Utils.printLog("photo", "::" + acct.getPhotoUrl());
-                HashMap<String, String> userData = new HashMap<>();
-                userData.put(Utils.email_key, acct.getEmail());
-                userData.put(Utils.name_key, acct.getDisplayName());
-                userData.put(Utils.SOCIAL_ID_key, acct.getId());
-                userData.put(Utils.SOCIAL_ID_key, acct.getId());
-                userData.put(Utils.LOGIN_TYPE_key, Utils.SOCIAL_LOGIN_GOOGLE_key_value);
+//                HashMap<String, String> userData = new HashMap<>();
+//                userData.put(Utils.email_key, acct.getEmail());
+//                userData.put(Utils.name_key, acct.getDisplayName());
+//                userData.put(Utils.SOCIAL_ID_key, acct.getId());
+//                userData.put(Utils.LOGIN_TYPE_key, Utils.SOCIAL_LOGIN_GOOGLE_key_value);
+//
+//
+//                generalFunc.setMemberData(userData);
+//
+//                (new StartActProcess(getActContext())).startAct(DashboardActivity.class);
+//                ActivityCompat.finishAffinity(LoginActivity.this);
 
-
-                generalFunc.setMemberData(userData);
-
-                (new StartActProcess(getActContext())).startAct(DashboardActivity.class);
-                ActivityCompat.finishAffinity(LoginActivity.this);
+                login("google", acct.getId(), acct.getEmail(), "");
             }
         }
     }

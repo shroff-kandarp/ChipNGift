@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.editBox.MaterialEditText;
 
@@ -107,12 +108,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     public void login(final String authType, final String userId, String emailId, String password) {
         HashMap<String, String> parameters = new HashMap<String, String>();
-        parameters.put("Type", "login");
-        parameters.put("Auth_type", authType);
-        parameters.put("Uniq_id", userId);
-        parameters.put("Email", emailId);
-        parameters.put("Password", password);
+        parameters.put("type", "login");
+        parameters.put("auth_type", authType);
+        parameters.put("uniq_id", userId);
+        parameters.put("email", emailId);
+        parameters.put("password", "1233");
 
+        Utils.printLog("UrlLogin", "::" + CommonUtilities.SERVER_URL_WEBSERVICE + "" + parameters.toString());
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
         exeWebServer.setLoaderConfig(getActContext(), true, generalFunc);
         exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {

@@ -25,15 +25,16 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0"
-                android:src="@mipmap/ic_drawer_menu" />
+                android:src="@mipmap/ic_drawer_menu"
+                android:tint="#FFFFFF" />
 
             <TextView
                 android:id="@+id/titleTxt"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="ChipnGift"
                 android:gravity="start|center_vertical"
+                android:text="ChipnGift"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
         </LinearLayout>

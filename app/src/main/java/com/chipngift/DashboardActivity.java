@@ -1,9 +1,11 @@
 package com.chipngift;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -14,13 +16,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.adapter.BannerPagerAdapter;
 import com.adapter.DrawerAdapter;
+import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
+import com.general.files.UpdateFrequentTask;
+import com.utils.CommonUtilities;
 import com.utils.Utils;
+import com.view.CirclePageIndicator;
+import com.view.CreateRoundedView;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class DashboardActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, UpdateFrequentTask.OnTaskRunCalled {
 
     DrawerLayout mDrawerLayout;
     ImageView menuImgView;
@@ -33,6 +44,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     GeneralFunctions generalFunc;
 
+    ArrayList<String> list_links;
+    CirclePageIndicator circlePageIndicator;
+    ViewPager mViewPager;
+    BannerPagerAdapter bannerAdapter;
+
+    int currentPage = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,13 +62,27 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         }
 
         generalFunc = new GeneralFunctions(getActContext());
+        list_links = new ArrayList<>();
 
         menuImgView = (ImageView) findViewById(R.id.menuImgView);
         menuListView = (ListView) findViewById(R.id.menuListView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         titleTxt = (TextView) findViewById(R.id.titleTxt);
-
+        menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
+
+
+//        list_links.add("https://www.chipngift.com/assets/img/slider/2.jpg");
+//        list_links.add("https://www.chipngift.com/assets/img/slider/2.jpg");
+//        list_links.add("https://www.chipngift.com/assets/img/slider/2.jpg");
+
+        bannerAdapter = new BannerPagerAdapter(getActContext(), list_links);
+
+        circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circlePageIndicator);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(bannerAdapter);
+        circlePageIndicator.setViewPager(mViewPager);
+        new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar)));
 
         buildMenu();
 
@@ -59,7 +91,27 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             (findViewById(R.id.header_area_noLogin)).setVisibility(View.GONE);
             ((TextView) findViewById(R.id.userNameTxt)).setText(generalFunc.retriveValue(Utils.name_key));
         }
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                currentPage = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        getBannerData();
     }
+
 
     public class setOnClickList implements View.OnClickListener {
 
@@ -108,6 +160,70 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         drawerAdapter.notifyDataSetChanged();
     }
 
+    public void getBannerData() {
+
+        list_links.clear();
+
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("type", "home_slider");
+
+        Utils.printLog("UrlBanner", "::" + CommonUtilities.SERVER_URL_WEBSERVICE + "" + parameters.toString());
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
+
+                Utils.printLog("Response", "::" + responseString);
+
+                if (responseString != null && !responseString.equals("")) {
+
+                    boolean isDataAvail = generalFunc.checkDataAvail("status", responseString);
+
+                    if (isDataAvail == true) {
+
+                        JSONArray arr = generalFunc.getJsonArray("data", responseString);
+                        if (arr != null) {
+                            for (int i = 0; i < arr.length(); i++) {
+                                String image_url = generalFunc.getJsonValue("image", generalFunc.getJsonObject(arr, i).toString());
+                                list_links.add(image_url);
+                            }
+
+
+                            bannerAdapter.notifyDataSetChanged();
+                            circlePageIndicator.notifyDataSetChanged();
+
+                            startAutoBannerScheduler();
+                        }
+
+                    } else {
+                        generalFunc.showGeneralMessage("Error Occurred", generalFunc.getJsonValue("message", responseString));
+                    }
+                } else {
+                }
+            }
+        });
+        exeWebServer.execute();
+    }
+
+    UpdateFrequentTask updateFrequentTask;
+
+    public void startAutoBannerScheduler() {
+
+        updateFrequentTask = new UpdateFrequentTask(4000);
+        updateFrequentTask.setTaskRunListener(this);
+        updateFrequentTask.startRepeatingTask();
+    }
+
+    @Override
+    public void onTaskRun() {
+
+        if ((currentPage + 1) < list_links.size()) {
+            mViewPager.setCurrentItem(currentPage + 1);
+        } else {
+            mViewPager.setCurrentItem(0);
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         int itemId = Integer.parseInt(list_menu_items.get(position)[2]);
@@ -126,7 +242,21 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     }
 
     @Override
+    protected void onDestroy() {
+        if (updateFrequentTask != null) {
+            updateFrequentTask.stopRepeatingTask();
+            updateFrequentTask = null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onBackPressed() {
+        if (updateFrequentTask != null) {
+            updateFrequentTask.stopRepeatingTask();
+            updateFrequentTask = null;
+        }
+
         if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerLayout.closeDrawer(Gravity.LEFT);
             return;

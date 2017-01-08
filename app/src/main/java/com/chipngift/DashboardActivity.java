@@ -24,10 +24,12 @@ import com.adapter.SubCategoryRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.general.files.UpdateFrequentTask;
+import com.squareup.picasso.Picasso;
 import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.CirclePageIndicator;
 import com.view.CreateRoundedView;
+import com.view.SelectableRoundedImageView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,6 +58,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     BannerPagerAdapter bannerAdapter;
     CategoryPagerAdapter categoryAdapter;
     UpdateFrequentTask updateBannerFrequentTask;
+    UpdateFrequentTask updateCategoryFrequentTask;
 
     RecyclerView subCategoryRecyclerView;
     SubCategoryRecyclerAdapter subCategoryRecAdapter;
@@ -64,6 +67,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     TextView categoryNameTxt;
 
     int currentPage = 0;
+    int currentCategoryPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             (findViewById(R.id.header_area)).setVisibility(View.VISIBLE);
             (findViewById(R.id.header_area_noLogin)).setVisibility(View.GONE);
             ((TextView) findViewById(R.id.userNameTxt)).setText(generalFunc.retriveValue(Utils.name_key));
+
+            if (generalFunc.retriveValue(Utils.LOGIN_TYPE_key).equals(Utils.SOCIAL_LOGIN_GOOGLE_key_value)) {
+                loadImageFromGoogle(generalFunc.retriveValue(Utils.SOCIAL_ID_key));
+            }
         }
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -153,10 +161,43 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         getBannerData();
         getCategory();
+
+
+    }
+
+    public void loadImageFromGoogle(String id) {
+        String url_google_profile_photo = "https://www.googleapis.com/plus/v1/people/" + id +
+                "?fields=image&key=AIzaSyDl1ZznPwWgaVjF6JEFAXURRwnhSA096u0";
+        Utils.printLog("Google Url", "::" + url_google_profile_photo);
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(url_google_profile_photo, true);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
+
+                Utils.printLog("Response", "::" + responseString);
+
+                if (responseString != null && !responseString.equals("")) {
+
+                    String image_obj = generalFunc.getJsonValue("image", responseString);
+
+                    if (!image_obj.equals("")) {
+                        String uerProfileImageUrl = generalFunc.getJsonValue("url", image_obj);
+                        Picasso.with(getActContext())
+                                .load(uerProfileImageUrl)
+                                .placeholder(R.mipmap.ic_no_pic_user)
+                                .error(R.mipmap.ic_no_pic_user)
+                                .into((SelectableRoundedImageView) findViewById(R.id.userImgView));
+                    }
+                } else {
+                }
+            }
+        });
+        exeWebServer.execute();
     }
 
     public void setSubCategory(int position) {
         data_sub_cat_list.clear();
+        currentCategoryPage = position;
 
         categoryNameTxt.setText(list_categories.get(position).get("CatName"));
         HashMap<String, String> mapDat = list_categories.get(position);
@@ -320,6 +361,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
                             categoryAdapter.notifyDataSetChanged();
                             setSubCategory(0);
+                            startAutoCategoryScheduler();
 
                         }
 
@@ -339,6 +381,22 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         updateBannerFrequentTask = new UpdateFrequentTask(4000);
         updateBannerFrequentTask.setTaskRunListener(this);
         updateBannerFrequentTask.startRepeatingTask();
+    }
+
+    public void startAutoCategoryScheduler() {
+
+        updateCategoryFrequentTask = new UpdateFrequentTask(10000);
+        updateCategoryFrequentTask.setTaskRunListener(new UpdateFrequentTask.OnTaskRunCalled() {
+            @Override
+            public void onTaskRun() {
+                if ((currentCategoryPage + 1) < list_categories.size()) {
+                    categoryViewPager.setCurrentItem(currentCategoryPage + 1);
+                } else {
+                    categoryViewPager.setCurrentItem(0);
+                }
+            }
+        });
+        updateCategoryFrequentTask.startRepeatingTask();
     }
 
     @Override
@@ -374,6 +432,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             updateBannerFrequentTask.stopRepeatingTask();
             updateBannerFrequentTask = null;
         }
+        if (updateCategoryFrequentTask != null) {
+            updateCategoryFrequentTask.stopRepeatingTask();
+            updateCategoryFrequentTask = null;
+        }
         super.onDestroy();
     }
 
@@ -382,6 +444,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         if (updateBannerFrequentTask != null) {
             updateBannerFrequentTask.stopRepeatingTask();
             updateBannerFrequentTask = null;
+        }
+        if (updateCategoryFrequentTask != null) {
+            updateCategoryFrequentTask.stopRepeatingTask();
+            updateCategoryFrequentTask = null;
         }
 
         if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {

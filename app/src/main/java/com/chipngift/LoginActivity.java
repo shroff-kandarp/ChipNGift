@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 Utils.printLog("Login", "::" + acct.getDisplayName());
                 Utils.printLog("email", "::" + acct.getEmail());
-                Utils.printLog("id", "::" + acct.getId());
+                Utils.printLog("Googleid", "::" + acct.getId());
                 Utils.printLog("tok", "::" + acct.getIdToken());
                 Utils.printLog("photo", "::" + acct.getPhotoUrl());
                 HashMap<String, String> userData = new HashMap<>();

@@ -27,6 +27,7 @@ public class Utils {
     public static String LOGIN_TYPE_key = "LOGIN_TYPE";
     public static String SOCIAL_LOGIN_GOOGLE_key_value = "GOOGLE";
     public static String SOCIAL_LOGIN_FACEBOOK_key_value = "FACEBOOK";
+    public static String FACEBOOK_APPID = "1531770536838211";
 
     public static final int MENU_ABOUT_US = 0;
     public static final int MENU_BLOG = 1;

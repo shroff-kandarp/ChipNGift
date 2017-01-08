@@ -121,6 +121,14 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
             if (generalFunc.retriveValue(Utils.LOGIN_TYPE_key).equals(Utils.SOCIAL_LOGIN_GOOGLE_key_value)) {
                 loadImageFromGoogle(generalFunc.retriveValue(Utils.SOCIAL_ID_key));
+            } else if (generalFunc.retriveValue(Utils.LOGIN_TYPE_key).equals(Utils.SOCIAL_LOGIN_FACEBOOK_key_value)) {
+
+                String uerProfileImageUrl = "https://graph.facebook.com/" + generalFunc.retriveValue(Utils.SOCIAL_ID_key) + "/picture?type=large";
+                Picasso.with(getActContext())
+                        .load(uerProfileImageUrl)
+                        .placeholder(R.mipmap.ic_no_pic_user)
+                        .error(R.mipmap.ic_no_pic_user)
+                        .into((SelectableRoundedImageView) findViewById(R.id.userImgView));
             }
         }
 

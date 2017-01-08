@@ -2,17 +2,26 @@ package com.chipngift;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.login.widget.LoginButton;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
+import com.general.files.RegisterFbLoginResCallBack;
 import com.general.files.StartActProcess;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -24,6 +33,9 @@ import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.editBox.MaterialEditText;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -33,29 +45,67 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     Button googleLoginBtn;
+    Button fbLoginBtn;
     GoogleApiClient mGoogleApiClient;
 
     GeneralFunctions generalFunc;
     MaterialEditText emailBox;
     MaterialEditText passwordBox;
 
+    CallbackManager callbackManager;
+    LoginButton loginButton;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getActContext());
+        FacebookSdk.setWebDialogTheme(R.style.FBDialogtheme);
         setContentView(R.layout.login_screen);
+
+
+        FacebookSdk.setApplicationId(Utils.FACEBOOK_APPID);
 
         generalFunc = new GeneralFunctions(getActContext());
 
+        fbLoginBtn = (Button) findViewById(R.id.fbLoginBtn);
         googleLoginBtn = (Button) findViewById(R.id.googleLoginBtn);
         emailBox = (MaterialEditText) findViewById(R.id.emailBox);
         passwordBox = (MaterialEditText) findViewById(R.id.passwordBox);
         passwordBox.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         googleLoginBtn.setOnClickListener(new setOnClickList());
+        fbLoginBtn.setOnClickListener(new setOnClickList());
 
         emailBox.setBothText("Email");
         passwordBox.setBothText("Password");
 
+        loginButton = new LoginButton(getActContext());
+
+        callbackManager = CallbackManager.Factory.create();
+
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email", "user_about_me"));
+
+        loginButton.registerCallback(callbackManager, new RegisterFbLoginResCallBack(getActContext()));
+
         buildGoogleApi();
+
+        PackageInfo info;
+        try {
+            info = getPackageManager().getPackageInfo("com.chipngift", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md;
+                md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String something = new String(Base64.encode(md.digest(), 0));
+                //String something = new String(Base64.encodeBytes(md.digest()));
+                Log.e("hash key", something);
+            }
+        } catch (PackageManager.NameNotFoundException e1) {
+            Log.e("name not found", e1.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("no such an algorithm", e.toString());
+        } catch (Exception e) {
+            Log.e("exception", e.toString());
+        }
     }
 
     public void buildGoogleApi() {
@@ -81,6 +131,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             switch (view.getId()) {
                 case R.id.googleLoginBtn:
                     startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient), Utils.GOOGLE_SIGN_IN_REQ_CODE);
+                    break;
+                case R.id.fbLoginBtn:
+                    loginButton.performClick();
                     break;
             }
         }
@@ -184,6 +237,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 //                login("google", acct.getId(), acct.getEmail(), "");
             }
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
 }

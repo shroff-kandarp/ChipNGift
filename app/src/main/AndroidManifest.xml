@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.chipngift">
 
     <application
+        android:name="com.general.files.MyApp"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,6 +22,13 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
         <activity android:name=".AppIntroActivity"></activity>
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            tools:replace="android:theme"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:screenOrientation="nosensor"
+            android:theme="@style/FBtheme" />
     </application>
 
 </manifest>

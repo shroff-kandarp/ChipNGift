@@ -134,6 +134,7 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/fbLoginBtn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 
 import com.chipngift.LauncherActivity;
+import com.facebook.login.LoginManager;
 import com.utils.Utils;
 import com.view.GenerateAlertBox;
 
@@ -244,6 +245,10 @@ public class GeneralFunctions {
 //        }
 
         return true;
+    }
+
+    public void logOUTFrmFB() {
+        LoginManager.getInstance().logOut();
     }
 
     public Integer parseInt(int orig, String value) {

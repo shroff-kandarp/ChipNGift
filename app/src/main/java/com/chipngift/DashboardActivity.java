@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -17,7 +18,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.adapter.BannerPagerAdapter;
+import com.adapter.CategoryPagerAdapter;
 import com.adapter.DrawerAdapter;
+import com.adapter.SubCategoryRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
 import com.general.files.UpdateFrequentTask;
@@ -27,6 +30,7 @@ import com.view.CirclePageIndicator;
 import com.view.CreateRoundedView;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,12 +49,19 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     GeneralFunctions generalFunc;
 
     ArrayList<String> list_banners;
-    ArrayList<String> list_categories;
+    ArrayList<HashMap<String, String>> list_categories;
     CirclePageIndicator circlePageIndicator;
     ViewPager mViewPager;
     ViewPager categoryViewPager;
     BannerPagerAdapter bannerAdapter;
+    CategoryPagerAdapter categoryAdapter;
     UpdateFrequentTask updateBannerFrequentTask;
+
+    RecyclerView subCategoryRecyclerView;
+    SubCategoryRecyclerAdapter subCategoryRecAdapter;
+
+    ArrayList<String> data_sub_cat_list = new ArrayList<>();
+    TextView categoryNameTxt;
 
     int currentPage = 0;
 
@@ -72,9 +83,12 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         menuListView = (ListView) findViewById(R.id.menuListView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         titleTxt = (TextView) findViewById(R.id.titleTxt);
+        categoryNameTxt = (TextView) findViewById(R.id.categoryName);
         circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circlePageIndicator);
         categoryViewPager = (ViewPager) findViewById(R.id.categoryViewPager);
         mViewPager = (ViewPager) findViewById(R.id.pager);
+
+        subCategoryRecyclerView = (RecyclerView) findViewById(R.id.subCategoryRecyclerView);
 
 //        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
 //        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
@@ -84,8 +98,12 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         menuImgView.setOnClickListener(new setOnClickList());
 
         bannerAdapter = new BannerPagerAdapter(getActContext(), list_banners);
+        categoryAdapter = new CategoryPagerAdapter(getActContext(), list_categories);
 
+        subCategoryRecAdapter = new SubCategoryRecyclerAdapter(getActContext(), data_sub_cat_list);
+        subCategoryRecyclerView.setAdapter(subCategoryRecAdapter);
 
+        categoryViewPager.setAdapter(categoryAdapter);
         mViewPager.setAdapter(bannerAdapter);
         circlePageIndicator.setViewPager(mViewPager);
         new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar)));
@@ -115,7 +133,44 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             }
         });
 
+        categoryViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                setSubCategory(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         getBannerData();
+        getCategory();
+    }
+
+    public void setSubCategory(int position) {
+        data_sub_cat_list.clear();
+
+        categoryNameTxt.setText(list_categories.get(position).get("CatName"));
+        HashMap<String, String> mapDat = list_categories.get(position);
+
+        int totalSubCategory = generalFunc.parseInt(0, mapDat.get("TotalSubCategory"));
+
+        ArrayList<String> dataSub = new ArrayList<String>();
+        for (int i = 0; i < totalSubCategory; i++) {
+            dataSub.add(mapDat.get("subCatName" + i));
+        }
+
+        data_sub_cat_list.addAll(dataSub);
+
+        subCategoryRecAdapter.notifyDataSetChanged();
     }
 
 
@@ -216,7 +271,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         list_categories.clear();
 
         HashMap<String, String> parameters = new HashMap<String, String>();
-        parameters.put("type", "home_slider");
+        parameters.put("type", "home_catgoryslier");
 
         Utils.printLog("UrlBanner", "::" + CommonUtilities.SERVER_URL_WEBSERVICE + "" + parameters.toString());
         ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
@@ -233,17 +288,39 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                     if (isDataAvail == true) {
 
                         JSONArray arr = generalFunc.getJsonArray("data", responseString);
+                        Utils.printLog("arr", "::" + arr);
                         if (arr != null) {
                             for (int i = 0; i < arr.length(); i++) {
-                                String image_url = generalFunc.getJsonValue("image", generalFunc.getJsonObject(arr, i).toString());
-                                list_banners.add(image_url);
+                                String image_url = generalFunc.getJsonValue("imagepath", generalFunc.getJsonObject(arr, i).toString());
+
+                                Utils.printLog("image_url", "::" + image_url);
+                                String categoryName = generalFunc.getJsonValue("catname", generalFunc.getJsonObject(arr, i).toString());
+
+                                HashMap<String, String> map_data = new HashMap<String, String>();
+                                map_data.put("CatName", categoryName);
+                                map_data.put("CatImgPath", image_url);
+
+                                JSONArray subcategoriesArr = generalFunc.getJsonArray("subcategories", generalFunc.getJsonObject(arr, i).toString());
+
+                                for (int j = 0; j < subcategoriesArr.length(); j++) {
+                                    JSONObject obj_temp = generalFunc.getJsonObject(subcategoriesArr, j);
+
+                                    String subCatName = generalFunc.getJsonValue("subcatname", obj_temp.toString());
+
+                                    map_data.put("subCatName" + j, subCatName);
+                                }
+
+                                map_data.put("TotalSubCategory", "" + subcategoriesArr.length());
+                                list_categories.add(map_data);
+
+                                if (i == 0) {
+                                    categoryNameTxt.setText(categoryName);
+                                }
                             }
 
+                            categoryAdapter.notifyDataSetChanged();
+                            setSubCategory(0);
 
-                            bannerAdapter.notifyDataSetChanged();
-                            circlePageIndicator.notifyDataSetChanged();
-
-                            startAutoBannerScheduler();
                         }
 
                     } else {

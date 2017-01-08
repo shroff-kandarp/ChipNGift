@@ -246,6 +246,17 @@ public class GeneralFunctions {
         return true;
     }
 
+    public Integer parseInt(int orig, String value) {
+
+        try {
+            int value_int = Integer.parseInt(value);
+            return value_int;
+        } catch (Exception e) {
+            return orig;
+        }
+
+    }
+
     public void restartApp() {
         (new StartActProcess(mContext)).startAct(LauncherActivity.class);
         ActivityCompat.finishAffinity((Activity) mContext);

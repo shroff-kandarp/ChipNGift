@@ -48,10 +48,28 @@
             android:layout_below="@id/topArea"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/categoryName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="2dp"
+                android:textColor="#2F2F2F"
+                android:textSize="18sp" />
+
             <android.support.v4.view.ViewPager
                 android:id="@+id/categoryViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="200dp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/subCategoryRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
         </LinearLayout>
 
@@ -61,8 +79,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="15dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
             app:fab_addButtonColorNormal="@color/pink"
             app:fab_addButtonColorPressed="@color/pink_pressed"
             app:fab_addButtonPlusIconColor="@color/whiteColor"

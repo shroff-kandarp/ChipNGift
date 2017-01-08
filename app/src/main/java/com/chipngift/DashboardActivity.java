@@ -44,10 +44,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     GeneralFunctions generalFunc;
 
-    ArrayList<String> list_links;
+    ArrayList<String> list_banners;
+    ArrayList<String> list_categories;
     CirclePageIndicator circlePageIndicator;
     ViewPager mViewPager;
+    ViewPager categoryViewPager;
     BannerPagerAdapter bannerAdapter;
+    UpdateFrequentTask updateBannerFrequentTask;
 
     int currentPage = 0;
 
@@ -62,24 +65,27 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         }
 
         generalFunc = new GeneralFunctions(getActContext());
-        list_links = new ArrayList<>();
+        list_banners = new ArrayList<>();
+        list_categories = new ArrayList<>();
 
         menuImgView = (ImageView) findViewById(R.id.menuImgView);
         menuListView = (ListView) findViewById(R.id.menuListView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         titleTxt = (TextView) findViewById(R.id.titleTxt);
+        circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circlePageIndicator);
+        categoryViewPager = (ViewPager) findViewById(R.id.categoryViewPager);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+
+//        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
+//        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
+//        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
+
         menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
 
+        bannerAdapter = new BannerPagerAdapter(getActContext(), list_banners);
 
-//        list_links.add("https://www.chipngift.com/assets/img/slider/2.jpg");
-//        list_links.add("https://www.chipngift.com/assets/img/slider/2.jpg");
-//        list_links.add("https://www.chipngift.com/assets/img/slider/2.jpg");
 
-        bannerAdapter = new BannerPagerAdapter(getActContext(), list_links);
-
-        circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circlePageIndicator);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(bannerAdapter);
         circlePageIndicator.setViewPager(mViewPager);
         new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar)));
@@ -162,7 +168,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     public void getBannerData() {
 
-        list_links.clear();
+        list_banners.clear();
 
         HashMap<String, String> parameters = new HashMap<String, String>();
         parameters.put("type", "home_slider");
@@ -185,7 +191,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                         if (arr != null) {
                             for (int i = 0; i < arr.length(); i++) {
                                 String image_url = generalFunc.getJsonValue("image", generalFunc.getJsonObject(arr, i).toString());
-                                list_links.add(image_url);
+                                list_banners.add(image_url);
                             }
 
 
@@ -196,7 +202,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                         }
 
                     } else {
-                        generalFunc.showGeneralMessage("Error Occurred", generalFunc.getJsonValue("message", responseString));
+//                        generalFunc.showGeneralMessage("Error Occurred", generalFunc.getJsonValue("message", responseString));
                     }
                 } else {
                 }
@@ -205,19 +211,63 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         exeWebServer.execute();
     }
 
-    UpdateFrequentTask updateFrequentTask;
+    public void getCategory() {
+
+        list_categories.clear();
+
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        parameters.put("type", "home_slider");
+
+        Utils.printLog("UrlBanner", "::" + CommonUtilities.SERVER_URL_WEBSERVICE + "" + parameters.toString());
+        ExecuteWebServerUrl exeWebServer = new ExecuteWebServerUrl(parameters);
+        exeWebServer.setDataResponseListener(new ExecuteWebServerUrl.SetDataResponse() {
+            @Override
+            public void setResponse(String responseString) {
+
+                Utils.printLog("Response", "::" + responseString);
+
+                if (responseString != null && !responseString.equals("")) {
+
+                    boolean isDataAvail = generalFunc.checkDataAvail("status", responseString);
+
+                    if (isDataAvail == true) {
+
+                        JSONArray arr = generalFunc.getJsonArray("data", responseString);
+                        if (arr != null) {
+                            for (int i = 0; i < arr.length(); i++) {
+                                String image_url = generalFunc.getJsonValue("image", generalFunc.getJsonObject(arr, i).toString());
+                                list_banners.add(image_url);
+                            }
+
+
+                            bannerAdapter.notifyDataSetChanged();
+                            circlePageIndicator.notifyDataSetChanged();
+
+                            startAutoBannerScheduler();
+                        }
+
+                    } else {
+//                        generalFunc.showGeneralMessage("Error Occurred", generalFunc.getJsonValue("message", responseString));
+                    }
+                } else {
+                }
+            }
+        });
+        exeWebServer.execute();
+    }
+
 
     public void startAutoBannerScheduler() {
 
-        updateFrequentTask = new UpdateFrequentTask(4000);
-        updateFrequentTask.setTaskRunListener(this);
-        updateFrequentTask.startRepeatingTask();
+        updateBannerFrequentTask = new UpdateFrequentTask(4000);
+        updateBannerFrequentTask.setTaskRunListener(this);
+        updateBannerFrequentTask.startRepeatingTask();
     }
 
     @Override
     public void onTaskRun() {
 
-        if ((currentPage + 1) < list_links.size()) {
+        if ((currentPage + 1) < list_banners.size()) {
             mViewPager.setCurrentItem(currentPage + 1);
         } else {
             mViewPager.setCurrentItem(0);
@@ -243,18 +293,18 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     @Override
     protected void onDestroy() {
-        if (updateFrequentTask != null) {
-            updateFrequentTask.stopRepeatingTask();
-            updateFrequentTask = null;
+        if (updateBannerFrequentTask != null) {
+            updateBannerFrequentTask.stopRepeatingTask();
+            updateBannerFrequentTask = null;
         }
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
-        if (updateFrequentTask != null) {
-            updateFrequentTask.stopRepeatingTask();
-            updateFrequentTask = null;
+        if (updateBannerFrequentTask != null) {
+            updateBannerFrequentTask.stopRepeatingTask();
+            updateBannerFrequentTask = null;
         }
 
         if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {

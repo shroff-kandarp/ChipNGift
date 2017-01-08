@@ -7,12 +7,12 @@
     android:layout_height="match_parent"
     android:background="#fce8e8">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/topArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -42,56 +42,63 @@
                 app:radius="5dp" />
         </RelativeLayout>
 
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/topArea"
+            android:orientation="vertical">
 
-            <com.view.floatingbutton.FloatingActionsMenu
-                android:id="@+id/multiple_actions"
+            <android.support.v4.view.ViewPager
+                android:id="@+id/categoryViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+        </LinearLayout>
+
+        <com.view.floatingbutton.FloatingActionsMenu
+            android:id="@+id/multiple_actions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="15dp"
+            app:fab_addButtonColorNormal="@color/pink"
+            app:fab_addButtonColorPressed="@color/pink_pressed"
+            app:fab_addButtonPlusIconColor="@color/whiteColor"
+            app:fab_addButtonSize="mini"
+            app:fab_labelStyle="@style/menu_labels_style"
+            app:fab_labelsPosition="left">
+
+            <com.view.floatingbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginEnd="15dp"
-                app:fab_addButtonColorNormal="@color/pink"
-                app:fab_addButtonColorPressed="@color/pink_pressed"
-                app:fab_addButtonPlusIconColor="@color/whiteColor"
-                app:fab_addButtonSize="mini"
-                app:fab_labelStyle="@style/menu_labels_style"
-                app:fab_labelsPosition="left">
+                app:fab_colorNormal="@color/white"
+                app:fab_colorPressed="@color/white_pressed"
+                app:fab_size="mini"
+                app:fab_title="Create an event" />
 
-                <com.view.floatingbutton.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fab_colorNormal="@color/white"
-                    app:fab_colorPressed="@color/white_pressed"
-                    app:fab_size="mini"
-                    app:fab_title="Create an event" />
-
-                <com.view.floatingbutton.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fab_colorNormal="@color/white"
-                    app:fab_colorPressed="@color/white_pressed"
-                    app:fab_size="mini"
-                    app:fab_title="Categories" />
+            <com.view.floatingbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/white"
+                app:fab_colorPressed="@color/white_pressed"
+                app:fab_size="mini"
+                app:fab_title="Categories" />
 
 
-                <com.view.floatingbutton.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:fab_colorNormal="@color/white"
-                    app:fab_colorPressed="@color/white_pressed"
-                    app:fab_size="mini"
-                    app:fab_title="Video gallery" />
+            <com.view.floatingbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/white"
+                app:fab_colorPressed="@color/white_pressed"
+                app:fab_size="mini"
+                app:fab_title="Video gallery" />
 
 
-            </com.view.floatingbutton.FloatingActionsMenu>
-        </RelativeLayout>
+        </com.view.floatingbutton.FloatingActionsMenu>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/left_linear"

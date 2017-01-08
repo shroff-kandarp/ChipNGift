@@ -170,19 +170,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Utils.printLog("id", "::" + acct.getId());
                 Utils.printLog("tok", "::" + acct.getIdToken());
                 Utils.printLog("photo", "::" + acct.getPhotoUrl());
-//                HashMap<String, String> userData = new HashMap<>();
-//                userData.put(Utils.email_key, acct.getEmail());
-//                userData.put(Utils.name_key, acct.getDisplayName());
-//                userData.put(Utils.SOCIAL_ID_key, acct.getId());
-//                userData.put(Utils.LOGIN_TYPE_key, Utils.SOCIAL_LOGIN_GOOGLE_key_value);
-//
-//
-//                generalFunc.setMemberData(userData);
-//
-//                (new StartActProcess(getActContext())).startAct(DashboardActivity.class);
-//                ActivityCompat.finishAffinity(LoginActivity.this);
+                HashMap<String, String> userData = new HashMap<>();
+                userData.put(Utils.email_key, acct.getEmail());
+                userData.put(Utils.name_key, acct.getDisplayName());
+                userData.put(Utils.SOCIAL_ID_key, acct.getId());
+                userData.put(Utils.LOGIN_TYPE_key, Utils.SOCIAL_LOGIN_GOOGLE_key_value);
 
-                login("google", acct.getId(), acct.getEmail(), "");
+
+                generalFunc.setMemberData(userData);
+
+                (new StartActProcess(getActContext())).startAct(DashboardActivity.class);
+                ActivityCompat.finishAffinity(LoginActivity.this);
+
+//                login("google", acct.getId(), acct.getEmail(), "");
             }
         }
     }

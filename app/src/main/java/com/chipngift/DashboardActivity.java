@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.adapter.BannerPagerAdapter;
 import com.adapter.CategoryPagerAdapter;
+import com.adapter.CategoryRecyclerAdapter;
 import com.adapter.DrawerAdapter;
 import com.adapter.SubCategoryRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
@@ -30,6 +31,7 @@ import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.CirclePageIndicator;
 import com.view.CreateRoundedView;
+import com.view.GridAutofitLayoutManager;
 import com.view.SelectableRoundedImageView;
 
 import org.json.JSONArray;
@@ -58,8 +60,11 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     ViewPager categoryViewPager;
     BannerPagerAdapter bannerAdapter;
     CategoryPagerAdapter categoryAdapter;
+    CategoryRecyclerAdapter categoryRecyclerAdapter;
     UpdateFrequentTask updateBannerFrequentTask;
     UpdateFrequentTask updateCategoryFrequentTask;
+
+    RecyclerView categoryRecyclerView;
 
     RecyclerView subCategoryRecyclerView;
     SubCategoryRecyclerAdapter subCategoryRecAdapter;
@@ -93,22 +98,24 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         categoryViewPager = (ViewPager) findViewById(R.id.categoryViewPager);
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
+        categoryRecyclerView = (RecyclerView) findViewById(R.id.categoryRecyclerView);
         subCategoryRecyclerView = (RecyclerView) findViewById(R.id.subCategoryRecyclerView);
 
-//        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
-//        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
-//        list_banners.add("https://www.chipngift.com/assets/img/slider/2.jpg");
-
+        categoryRecyclerView.setLayoutManager(new GridAutofitLayoutManager(getActContext(), Utils.dipToPixels(getActContext(), 75)));
+        subCategoryRecyclerView.setLayoutManager(new GridAutofitLayoutManager(getActContext(), Utils.dipToPixels(getActContext(), 105)));
         menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
 
         bannerAdapter = new BannerPagerAdapter(getActContext(), list_banners);
         categoryAdapter = new CategoryPagerAdapter(getActContext(), list_categories);
 
+        categoryRecyclerAdapter = new CategoryRecyclerAdapter(getActContext(), list_categories);
+        categoryRecyclerView.setAdapter(categoryRecyclerAdapter);
+
         subCategoryRecAdapter = new SubCategoryRecyclerAdapter(getActContext(), data_sub_cat_list);
         subCategoryRecyclerView.setAdapter(subCategoryRecAdapter);
 
-        categoryViewPager.setAdapter(categoryAdapter);
+//        categoryViewPager.setAdapter(categoryAdapter);
         mViewPager.setAdapter(bannerAdapter);
         circlePageIndicator.setViewPager(mViewPager);
         new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar)));
@@ -168,7 +175,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             }
         });
 
-        getBannerData();
+//        getBannerData();
         getCategory();
 
         subCategoryRecAdapter.setOnItemClickList(new SubCategoryRecyclerAdapter.OnItemClickList() {
@@ -183,6 +190,28 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
             }
         });
 
+        categoryRecyclerAdapter.setOnItemClickList(new CategoryRecyclerAdapter.OnItemClickList() {
+            @Override
+            public void onItemClick(int position) {
+
+                ArrayList<HashMap<String, String>> list_categories_temp = new ArrayList<HashMap<String, String>>();
+                for (int i = 0; i < list_categories.size(); i++) {
+                    HashMap<String, String> mapData = list_categories.get(i);
+
+                    if (i == position) {
+                        mapData.put("isHover", "true");
+                    } else {
+                        mapData.put("isHover", "false");
+                    }
+
+                    list_categories_temp.add(mapData);
+                }
+
+                categoryRecyclerAdapter.notifyDataSetChanged();
+
+                setSubCategory(position);
+            }
+        });
     }
 
     public void loadImageFromGoogle(String id) {
@@ -366,6 +395,11 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                                 map_data.put("CatName", categoryName);
                                 map_data.put("CatImgPath", image_url);
                                 map_data.put("catgid", catgid);
+                                if (i == 0) {
+                                    map_data.put("isHover", "true");
+                                } else {
+                                    map_data.put("isHover", "false");
+                                }
 
                                 JSONArray subcategoriesArr = generalFunc.getJsonArray("subcategories", generalFunc.getJsonObject(arr, i).toString());
 
@@ -382,14 +416,15 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                                 map_data.put("TotalSubCategory", "" + subcategoriesArr.length());
                                 list_categories.add(map_data);
 
-                                if (i == 0) {
-                                    categoryNameTxt.setText(categoryName);
-                                }
+//                                if (i == 0) {
+//                                    categoryNameTxt.setText(categoryName);
+//                                }
                             }
 
-                            categoryAdapter.notifyDataSetChanged();
-                            setSubCategory(0);
-                            startAutoCategoryScheduler();
+                            categoryRecyclerAdapter.notifyDataSetChanged();
+                            categoryRecyclerAdapter.clickOnItem(0);
+//                            setSubCategory(0);
+//                            startAutoCategoryScheduler();
 
                         }
 

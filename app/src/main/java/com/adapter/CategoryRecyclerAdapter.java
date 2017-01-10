@@ -6,11 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chipngift.R;
-import com.utils.Utils;
-import com.view.CreateRoundedView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 /**
  * Created by Admin on 04-07-2016.
  */
-public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategoryRecyclerAdapter.ViewHolder> {
+public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecyclerAdapter.ViewHolder> {
 
     ArrayList<HashMap<String, String>> list_item;
     Context mContext;
@@ -27,14 +26,14 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
 
     boolean isFirstRun = true;
 
-    public SubCategoryRecyclerAdapter(Context mContext, ArrayList<HashMap<String, String>> list_item) {
+    public CategoryRecyclerAdapter(Context mContext, ArrayList<HashMap<String, String>> list_item) {
         this.mContext = mContext;
         this.list_item = list_item;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sub_category, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_category, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -43,14 +42,19 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
-        String item = list_item.get(position).get("subCatName");
+        HashMap<String, String> map = list_item.get(position);
 
-        viewHolder.subCategoryNameTxt.setText(item);
+        String item = map.get("CatName");
 
+        viewHolder.categoryNameTxt.setText(item);
 
-        new CreateRoundedView(Color.parseColor("#FFFFFF"), Utils.dipToPixels(mContext, 5), 0, Color.parseColor("#FFFFFF"), viewHolder.subCategoryNameTxt);
+        if (map.get("isHover") != null && map.get("isHover").equals("true")) {
+            viewHolder.contentView.setBackgroundColor(Color.parseColor("#CECECE"));
+        } else {
+            viewHolder.contentView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
 
-        viewHolder.subCategoryNameTxt.setOnClickListener(new View.OnClickListener() {
+        viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onItemClickList != null) {
@@ -62,11 +66,13 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView subCategoryNameTxt;
+        public TextView categoryNameTxt;
+        public LinearLayout contentView;
 
         public ViewHolder(View view) {
             super(view);
-            subCategoryNameTxt = (TextView) view.findViewById(R.id.subCategoryNameTxt);
+            categoryNameTxt = (TextView) view.findViewById(R.id.categoryNameTxt);
+            contentView = (LinearLayout) view.findViewById(R.id.contentView);
         }
     }
 
@@ -81,6 +87,12 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
 
     public void setOnItemClickList(OnItemClickList onItemClickList) {
         this.onItemClickList = onItemClickList;
+    }
+
+    public void clickOnItem(int position) {
+        if (onItemClickList != null) {
+            onItemClickList.onItemClick(position);
+        }
     }
 
 }

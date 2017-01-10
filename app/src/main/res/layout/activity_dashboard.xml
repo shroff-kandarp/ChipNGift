@@ -11,85 +11,100 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/topArea"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="70dp"
-                android:visibility="gone" />
-
-            <include
-                android:id="@+id/toolbar_include"
-                layout="@layout/design_toolbar_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp" />
-
-            <com.view.CirclePageIndicator
-                android:id="@+id/circlePageIndicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/pager"
-                android:layout_marginTop="-30dp"
-                android:visibility="gone"
-                app:centered="true"
-                app:fillColor="@color/appThemeColor"
-                app:radius="5dp" />
-        </RelativeLayout>
-
-        <LinearLayout
+        <include
+            android:id="@+id/toolbar_include"
+            layout="@layout/design_toolbar_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/topArea"
-            android:orientation="vertical">
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" />
 
-            <TextView
-                android:id="@+id/categoryName"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/toolbar_include"
+            android:layout_marginTop="10dp"
+            android:fillViewport="true">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="2dp"
-                android:textColor="#2F2F2F"
-                android:textSize="18sp"
-                android:visibility="gone" />
+                android:layout_height="wrap_content">
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/categoryViewPager"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:visibility="gone" />
+                <RelativeLayout
+                    android:id="@+id/topArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                app:cardBackgroundColor="#F5F5F5">
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="70dp"
+                        android:visibility="gone" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/categoryRecyclerView"
+
+                    <com.view.CirclePageIndicator
+                        android:id="@+id/circlePageIndicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/pager"
+                        android:layout_marginTop="-30dp"
+                        android:visibility="gone"
+                        app:centered="true"
+                        app:fillColor="@color/appThemeColor"
+                        app:radius="5dp" />
+                </RelativeLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="5dp"
-                    android:orientation="horizontal" />
-            </android.support.v7.widget.CardView>
+                    android:layout_below="@id/topArea"
+                    android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/subCategoryRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="5dp"
-                android:orientation="horizontal" />
+                    <TextView
+                        android:id="@+id/categoryName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textColor="#2F2F2F"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
 
-        </LinearLayout>
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/categoryViewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:visibility="gone" />
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        app:cardBackgroundColor="#F5F5F5">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/categoryRecyclerView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="5dp"
+                            android:orientation="horizontal" />
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/subCategoryRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="5dp"
+                        android:orientation="horizontal" />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
 
         <com.view.floatingbutton.FloatingActionsMenu
             android:id="@+id/multiple_actions"

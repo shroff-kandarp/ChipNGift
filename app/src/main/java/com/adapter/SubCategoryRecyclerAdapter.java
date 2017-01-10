@@ -10,20 +10,21 @@ import android.widget.TextView;
 import com.chipngift.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Admin on 04-07-2016.
  */
 public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategoryRecyclerAdapter.ViewHolder> {
 
-    ArrayList<String> list_item;
+    ArrayList<HashMap<String, String>> list_item;
     Context mContext;
 
     OnItemClickList onItemClickList;
 
     boolean isFirstRun = true;
 
-    public SubCategoryRecyclerAdapter(Context mContext, ArrayList<String> list_item) {
+    public SubCategoryRecyclerAdapter(Context mContext, ArrayList<HashMap<String, String>> list_item) {
         this.mContext = mContext;
         this.list_item = list_item;
     }
@@ -39,7 +40,7 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
-        String item = list_item.get(position);
+        String item = list_item.get(position).get("subCatName");
 
         viewHolder.subCategoryNameTxt.setText(item);
 

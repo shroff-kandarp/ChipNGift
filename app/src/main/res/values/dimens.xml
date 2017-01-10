@@ -5,7 +5,7 @@
 
 
     <dimen name="txt_size_18">18dp</dimen>
-    
+
     <dimen name="fab_size_normal">56dp</dimen>
     <dimen name="fab_size_mini">40dp</dimen>
 

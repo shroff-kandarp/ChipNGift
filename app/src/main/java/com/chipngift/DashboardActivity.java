@@ -23,6 +23,7 @@ import com.adapter.DrawerAdapter;
 import com.adapter.SubCategoryRecyclerAdapter;
 import com.general.files.ExecuteWebServerUrl;
 import com.general.files.GeneralFunctions;
+import com.general.files.StartActProcess;
 import com.general.files.UpdateFrequentTask;
 import com.squareup.picasso.Picasso;
 import com.utils.CommonUtilities;
@@ -63,7 +64,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
     RecyclerView subCategoryRecyclerView;
     SubCategoryRecyclerAdapter subCategoryRecAdapter;
 
-    ArrayList<String> data_sub_cat_list = new ArrayList<>();
+    ArrayList<HashMap<String, String>> data_sub_cat_list = new ArrayList<>();
     TextView categoryNameTxt;
 
     int currentPage = 0;
@@ -170,6 +171,17 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         getBannerData();
         getCategory();
 
+        subCategoryRecAdapter.setOnItemClickList(new SubCategoryRecyclerAdapter.OnItemClickList() {
+            @Override
+            public void onItemClick(int position) {
+
+                HashMap<String, String> mapData = data_sub_cat_list.get(position);
+
+                Bundle bn = new Bundle();
+                bn.putSerializable("DataMap", mapData);
+                (new StartActProcess(getActContext())).startActWithData(ViewTemplatesActivity.class, bn);
+            }
+        });
 
     }
 
@@ -212,9 +224,13 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
         int totalSubCategory = generalFunc.parseInt(0, mapDat.get("TotalSubCategory"));
 
-        ArrayList<String> dataSub = new ArrayList<String>();
+        ArrayList<HashMap<String, String>> dataSub = new ArrayList<>();
         for (int i = 0; i < totalSubCategory; i++) {
-            dataSub.add(mapDat.get("subCatName" + i));
+            HashMap<String, String> map = new HashMap<>();
+            map.put("subcatgid", mapDat.get("subcatgid" + i));
+            map.put("subCatName", mapDat.get("subCatName" + i));
+            map.put("catgid", mapDat.get("catgid"));
+            dataSub.add(map);
         }
 
         data_sub_cat_list.addAll(dataSub);
@@ -344,10 +360,12 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
                                 Utils.printLog("image_url", "::" + image_url);
                                 String categoryName = generalFunc.getJsonValue("catname", generalFunc.getJsonObject(arr, i).toString());
+                                String catgid = generalFunc.getJsonValue("catgid", generalFunc.getJsonObject(arr, i).toString());
 
                                 HashMap<String, String> map_data = new HashMap<String, String>();
                                 map_data.put("CatName", categoryName);
                                 map_data.put("CatImgPath", image_url);
+                                map_data.put("catgid", catgid);
 
                                 JSONArray subcategoriesArr = generalFunc.getJsonArray("subcategories", generalFunc.getJsonObject(arr, i).toString());
 
@@ -355,8 +373,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                                     JSONObject obj_temp = generalFunc.getJsonObject(subcategoriesArr, j);
 
                                     String subCatName = generalFunc.getJsonValue("subcatname", obj_temp.toString());
+                                    String subcatgid = generalFunc.getJsonValue("subcatgid", obj_temp.toString());
 
                                     map_data.put("subCatName" + j, subCatName);
+                                    map_data.put("subcatgid" + j, subcatgid);
                                 }
 
                                 map_data.put("TotalSubCategory", "" + subcategoriesArr.length());

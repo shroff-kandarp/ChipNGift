@@ -52,7 +52,6 @@ public class DrawerAdapter extends BaseAdapter {
         TextView menuTitleTxt = (TextView) view.findViewById(R.id.menuTitleTxt);
         menuIcon.setImageResource(Integer.parseInt(list_item.get(i)[0]));
         menuTitleTxt.setText(list_item.get(i)[1]);
-
         return view;
     }
 }

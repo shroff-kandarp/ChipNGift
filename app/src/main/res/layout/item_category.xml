@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="70dp"
+    android:layout_width="90dp"
     android:layout_height="wrap_content"
     android:id="@+id/contentView"
     android:layout_marginTop="5dp"
@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <ImageView
+        android:id="@+id/cat_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
@@ -17,8 +18,9 @@
         android:id="@+id/categoryNameTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#2F2F2F"
+        android:textStyle="bold"
+        android:textColor="#999999"
         android:gravity="center"
         android:text="Sample"
-        android:textSize="@dimen/txt_size_16" />
+        android:textSize="@dimen/txt_size_12" />
 </LinearLayout>

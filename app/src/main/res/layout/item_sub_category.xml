@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
     android:gravity="center"
@@ -10,8 +10,11 @@
         android:id="@+id/subCategoryNameTxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="3dp"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="#2F2F2F"
-        android:textSize="16sp" />
+        android:background="@drawable/redgoogle_rounded_button"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="12sp" />
 </LinearLayout>

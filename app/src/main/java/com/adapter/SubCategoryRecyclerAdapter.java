@@ -1,7 +1,6 @@
 package com.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.chipngift.R;
-import com.utils.Utils;
-import com.view.CreateRoundedView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +45,7 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
         viewHolder.subCategoryNameTxt.setText(item);
 
 
-        new CreateRoundedView(Color.parseColor("#FFFFFF"), Utils.dipToPixels(mContext, 5), 0, Color.parseColor("#FFFFFF"), viewHolder.subCategoryNameTxt);
+       // new CreateRoundedView(Color.parseColor("#FFFFFF"), Utils.dipToPixels(mContext, 5), 0, Color.parseColor("#FFFFFF"), viewHolder.subCategoryNameTxt);
 
         viewHolder.subCategoryNameTxt.setOnClickListener(new View.OnClickListener() {
             @Override

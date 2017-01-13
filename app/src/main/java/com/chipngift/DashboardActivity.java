@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
@@ -29,7 +30,6 @@ import com.general.files.UpdateFrequentTask;
 import com.squareup.picasso.Picasso;
 import com.utils.CommonUtilities;
 import com.utils.Utils;
-import com.view.CirclePageIndicator;
 import com.view.CreateRoundedView;
 import com.view.GridAutofitLayoutManager;
 import com.view.SelectableRoundedImageView;
@@ -55,7 +55,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     ArrayList<String> list_banners;
     ArrayList<HashMap<String, String>> list_categories;
-    CirclePageIndicator circlePageIndicator;
+//    CirclePageIndicator circlePageIndicator;
     ViewPager mViewPager;
     ViewPager categoryViewPager;
     BannerPagerAdapter bannerAdapter;
@@ -94,7 +94,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         titleTxt = (TextView) findViewById(R.id.titleTxt);
         categoryNameTxt = (TextView) findViewById(R.id.categoryName);
-        circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circlePageIndicator);
+//        circlePageIndicator = (CirclePageIndicator) findViewById(R.id.circlePageIndicator);
         categoryViewPager = (ViewPager) findViewById(R.id.categoryViewPager);
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
@@ -102,7 +102,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         subCategoryRecyclerView = (RecyclerView) findViewById(R.id.subCategoryRecyclerView);
 
         categoryRecyclerView.setLayoutManager(new GridAutofitLayoutManager(getActContext(), Utils.dipToPixels(getActContext(), 75)));
-        subCategoryRecyclerView.setLayoutManager(new GridAutofitLayoutManager(getActContext(), Utils.dipToPixels(getActContext(), 105)));
+        subCategoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActContext()));
         menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
 
@@ -117,8 +117,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
 //        categoryViewPager.setAdapter(categoryAdapter);
         mViewPager.setAdapter(bannerAdapter);
-        circlePageIndicator.setViewPager(mViewPager);
-        new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar)));
+//        circlePageIndicator.setViewPager(mViewPager);
+        new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar_include)));
 
         buildMenu();
 
@@ -345,7 +345,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
 
                             bannerAdapter.notifyDataSetChanged();
-                            circlePageIndicator.notifyDataSetChanged();
+//                            circlePageIndicator.notifyDataSetChanged();
 
                             startAutoBannerScheduler();
                         }
@@ -391,6 +391,10 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                                 String categoryName = generalFunc.getJsonValue("catname", generalFunc.getJsonObject(arr, i).toString());
                                 String catgid = generalFunc.getJsonValue("catgid", generalFunc.getJsonObject(arr, i).toString());
 
+                                if(categoryName.equalsIgnoreCase("charity") ||
+                                        categoryName.equalsIgnoreCase("make your own")){
+                                    continue;
+                                }
                                 HashMap<String, String> map_data = new HashMap<String, String>();
                                 map_data.put("CatName", categoryName);
                                 map_data.put("CatImgPath", image_url);

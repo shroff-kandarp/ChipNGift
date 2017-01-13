@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/contentView"
     android:layout_marginTop="5dp"
+    android:clickable="true"
     android:background="#FFFFFF"
     android:orientation="vertical">
 
@@ -21,6 +22,7 @@
         android:textStyle="bold"
         android:textColor="#999999"
         android:gravity="center"
+        android:clickable="true"
         android:text="Sample"
         android:textSize="@dimen/txt_size_12" />
 </LinearLayout>

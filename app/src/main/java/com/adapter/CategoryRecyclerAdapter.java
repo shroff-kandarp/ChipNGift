@@ -46,101 +46,71 @@ public class CategoryRecyclerAdapter extends RecyclerView.Adapter<CategoryRecycl
         HashMap<String, String> map = list_item.get(position);
 
         String item = map.get("CatName");
-        if (item.equals("Life Events "))
-        {
+        if (item.equals("Life Events ")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.life_event_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Occasions"))
-        {
+        } else if (item.equals("Occasions")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.ocassion_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Party"))
-        {
+        } else if (item.equals("Party")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.party_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Festivals"))
-        {
+        } else if (item.equals("Festivals")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.festival_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Hobbies"))
-        {
+        } else if (item.equals("Hobbies")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.hobbies_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Charity"))
-        {
+        } else if (item.equals("Charity")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.cherity_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Projects"))
-        {
+        } else if (item.equals("Projects")) {
             viewHolder.categoryImage.setImageResource(R.mipmap.projects_holo);
             viewHolder.categoryNameTxt.setText(item);
-        }
-        else if (item.equals("Make your own"))
-        {
-           // viewHolder.categoryImage.setImageResource(R.mipmap.projects_holo);
+        } else if (item.equals("Make your own")) {
+            // viewHolder.categoryImage.setImageResource(R.mipmap.projects_holo);
             viewHolder.categoryNameTxt.setText(item);
         }
 
-
-
-
-        int color =viewHolder.categoryNameTxt.getResources().getColor(R.color.appThemeColor);
+        int color = viewHolder.categoryNameTxt.getResources().getColor(R.color.appThemeColor);
 
         if (map.get("isHover") != null && map.get("isHover").equals("true")) {
 
-            if (item.equalsIgnoreCase("Life Events "))
-            {
+            viewHolder.categoryImage.setColorFilter(color);
+            viewHolder.categoryNameTxt.setTextColor(color);
+
+            /*if (item.equalsIgnoreCase("Life Events ")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.life_event_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Occasions"))
-            {
+            } else if (item.equals("Occasions")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.ocassion_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Party"))
-            {
+            } else if (item.equals("Party")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.party_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Festivals"))
-            {
+            } else if (item.equals("Festivals")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.festival_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Hobbies"))
-            {
+            } else if (item.equals("Hobbies")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.hobbies_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Charity"))
-            {
+            } else if (item.equals("Charity")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.cherity_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Projects"))
-            {
+            } else if (item.equals("Projects")) {
                 viewHolder.categoryImage.setImageResource(R.mipmap.projects_red);
                 viewHolder.categoryNameTxt.setTextColor(color);
-            }
-            else if (item.equals("Make your own"))
-            {
+            } else if (item.equals("Make your own")) {
                 //viewHolder.categoryImage.setImageResource(R.mipmap.projects_holo);
                 viewHolder.categoryNameTxt.setText(item);
-            }
-
-
+            }*/
 
 
             //viewHolder.contentView.setBackgroundColor(Color.parseColor("#CECECE"));
         } else {
-            viewHolder.contentView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//            viewHolder.contentView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            viewHolder.categoryImage.setColorFilter(Color.parseColor("#414042"));
+            viewHolder.categoryNameTxt.setTextColor(Color.parseColor("#414042"));
         }
 
         viewHolder.contentView.setOnClickListener(new View.OnClickListener() {

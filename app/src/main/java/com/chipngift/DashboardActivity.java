@@ -8,6 +8,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -31,7 +32,6 @@ import com.squareup.picasso.Picasso;
 import com.utils.CommonUtilities;
 import com.utils.Utils;
 import com.view.CreateRoundedView;
-import com.view.GridAutofitLayoutManager;
 import com.view.SelectableRoundedImageView;
 
 import org.json.JSONArray;
@@ -55,7 +55,7 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 
     ArrayList<String> list_banners;
     ArrayList<HashMap<String, String>> list_categories;
-//    CirclePageIndicator circlePageIndicator;
+    //    CirclePageIndicator circlePageIndicator;
     ViewPager mViewPager;
     ViewPager categoryViewPager;
     BannerPagerAdapter bannerAdapter;
@@ -101,7 +101,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
         categoryRecyclerView = (RecyclerView) findViewById(R.id.categoryRecyclerView);
         subCategoryRecyclerView = (RecyclerView) findViewById(R.id.subCategoryRecyclerView);
 
-        categoryRecyclerView.setLayoutManager(new GridAutofitLayoutManager(getActContext(), Utils.dipToPixels(getActContext(), 75)));
+//        categoryRecyclerView.setLayoutManager(new GridAutofitLayoutManager(getActContext(), Utils.dipToPixels(getActContext(), 75)));
+        categoryRecyclerView.setLayoutManager(new GridLayoutManager(getActContext(), 3));
         subCategoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActContext()));
         menuImgView.setColorFilter(Color.parseColor("#FFFFFF"));
         menuImgView.setOnClickListener(new setOnClickList());
@@ -118,7 +119,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
 //        categoryViewPager.setAdapter(categoryAdapter);
         mViewPager.setAdapter(bannerAdapter);
 //        circlePageIndicator.setViewPager(mViewPager);
-        new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0), getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar_include)));
+        new CreateRoundedView(getResources().getColor(R.color.appThemeColor), Utils.dipToPixels(getActContext(), 5), Utils.dipToPixels(getActContext(), 0),
+                getResources().getColor(R.color.appThemeColor), (findViewById(R.id.toolbar_include)));
 
         buildMenu();
 
@@ -207,6 +209,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                     list_categories_temp.add(mapData);
                 }
 
+                list_categories.clear();
+                list_categories.addAll(list_categories_temp);
                 categoryRecyclerAdapter.notifyDataSetChanged();
 
                 setSubCategory(position);
@@ -391,8 +395,8 @@ public class DashboardActivity extends AppCompatActivity implements AdapterView.
                                 String categoryName = generalFunc.getJsonValue("catname", generalFunc.getJsonObject(arr, i).toString());
                                 String catgid = generalFunc.getJsonValue("catgid", generalFunc.getJsonObject(arr, i).toString());
 
-                                if(categoryName.equalsIgnoreCase("charity") ||
-                                        categoryName.equalsIgnoreCase("make your own")){
+                                if (categoryName.equalsIgnoreCase("charity") ||
+                                        categoryName.equalsIgnoreCase("make your own")) {
                                     continue;
                                 }
                                 HashMap<String, String> map_data = new HashMap<String, String>();

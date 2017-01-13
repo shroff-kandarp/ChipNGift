@@ -47,7 +47,7 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
 
        // new CreateRoundedView(Color.parseColor("#FFFFFF"), Utils.dipToPixels(mContext, 5), 0, Color.parseColor("#FFFFFF"), viewHolder.subCategoryNameTxt);
 
-        viewHolder.subCategoryNameTxt.setOnClickListener(new View.OnClickListener() {
+        viewHolder.contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onItemClickList != null) {
@@ -60,10 +60,12 @@ public class SubCategoryRecyclerAdapter extends RecyclerView.Adapter<SubCategory
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView subCategoryNameTxt;
+        public View contentView;
 
         public ViewHolder(View view) {
             super(view);
             subCategoryNameTxt = (TextView) view.findViewById(R.id.subCategoryNameTxt);
+            contentView = (View) view.findViewById(R.id.contentView);
         }
     }
 
